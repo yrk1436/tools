@@ -308,17 +308,18 @@
       
       // Format date to display
       function formatDate(dateString) {
+        // Create date and force it to be interpreted at local timezone midnight
+        const date = new Date(dateString + 'T00:00:00');
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        return date.toLocaleDateString(undefined, options);
       }
       
       // Calculate time remaining
       function calculateTimeRemaining(targetDate) {
         const now = new Date();
-        const target = new Date(targetDate);
+        // Create target date with explicit time to avoid timezone issues
+        const target = new Date(targetDate + 'T00:00:00');
         
-        // Reset time to midnight
-        target.setHours(0, 0, 0, 0);
         
         // Calculate the difference in milliseconds
         const diff = target - now;
