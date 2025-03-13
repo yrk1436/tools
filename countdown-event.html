@@ -29,7 +29,7 @@
     }
     
     .container {
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
       background-color: white;
@@ -56,8 +56,16 @@
       margin-bottom: 30px;
     }
     
-    .form-group {
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
       margin-bottom: 15px;
+    }
+    
+    .form-group {
+      flex: 1;
+      min-width: 200px;
     }
     
     label {
@@ -94,82 +102,41 @@
       background-color: var(--secondary);
     }
     
-    .timers-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+    .timers-table-container {
+      overflow-x: auto;
+      margin-top: 20px;
     }
     
-    .timer-card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      position: relative;
-      transition: transform 0.3s;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
     }
     
-    .timer-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .timer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .timer-title {
-      font-size: 18px;
+    th {
+      background-color: var(--primary);
+      color: white;
       font-weight: 600;
-      color: var(--primary);
-      word-break: break-word;
+      text-align: left;
+      padding: 12px;
     }
     
-    .timer-date {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
     }
     
-    .timer-countdown {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--dark);
-      margin: 15px 0;
-      text-align: center;
+    tr:hover {
+      background-color: #f5f5f5;
     }
     
-    .timer-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-    
-    .delete-btn {
-      background-color: var(--danger);
-    }
-    
-    .delete-btn:hover {
-      background-color: #c1121f;
-    }
-    
-    .edit-btn {
-      background-color: var(--success);
-    }
-    
-    .edit-btn:hover {
-      background-color: #1a7a6d;
-    }
-    
-    .timer-category {
+    .category-badge {
       display: inline-block;
       padding: 3px 8px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 10px;
     }
     
     .category-birthday {
@@ -197,12 +164,27 @@
       color: #0d47a1;
     }
     
-    .past-event {
-      opacity: 0.7;
+    .timer-countdown {
+      font-weight: 700;
+      white-space: nowrap;
     }
     
-    .past-event .timer-countdown {
-      color: var(--danger);
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+      white-space: nowrap;
+    }
+    
+    .edit-btn {
+      background-color: var(--success);
+      padding: 6px 10px;
+      font-size: 14px;
+    }
+    
+    .delete-btn {
+      background-color: var(--danger);
+      padding: 6px 10px;
+      font-size: 14px;
     }
     
     .empty-state {
@@ -218,8 +200,16 @@
     }
     
     @media (max-width: 768px) {
-      .timers-container {
-        grid-template-columns: 1fr;
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .action-column {
+        width: 100px;
+      }
+      
+      .description-column {
+        display: none;
       }
     }
   </style>
@@ -230,30 +220,34 @@
     <p class="app-description">Keep track of important dates and see how much time is left until your special events.</p>
     
     <div class="form-container">
-      <div class="form-group">
-        <label for="event-title">Event Title</label>
-        <input type="text" id="event-title" placeholder="Enter event title" required>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="event-title">Event Title</label>
+          <input type="text" id="event-title" placeholder="Enter event title" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="event-date">Event Date</label>
+          <input type="date" id="event-date" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="event-category">Category</label>
+          <select id="event-category">
+            <option value="birthday">Birthday</option>
+            <option value="anniversary">Anniversary</option>
+            <option value="holiday">Holiday</option>
+            <option value="event">Event</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
       </div>
       
-      <div class="form-group">
-        <label for="event-date">Event Date</label>
-        <input type="date" id="event-date" required>
-      </div>
-      
-      <div class="form-group">
-        <label for="event-category">Category</label>
-        <select id="event-category">
-          <option value="birthday">Birthday</option>
-          <option value="anniversary">Anniversary</option>
-          <option value="holiday">Holiday</option>
-          <option value="event">Event</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label for="event-description">Description (Optional)</label>
-        <input type="text" id="event-description" placeholder="Add a brief description">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="event-description">Description (Optional)</label>
+          <input type="text" id="event-description" placeholder="Add a brief description">
+        </div>
       </div>
       
       <div class="button-group">
@@ -262,8 +256,27 @@
       </div>
     </div>
     
-    <div id="timers-container" class="timers-container">
-      <!-- Timer cards will be dynamically inserted here -->
+    <div class="timers-table-container">
+      <table id="timers-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th class="description-column">Description</th>
+            <th>Countdown</th>
+            <th class="action-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="timers-table-body">
+          <!-- Timer rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+      
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <p>No timers added yet. Create your first timer to get started!</p>
+        <button id="create-first-timer">Create Timer</button>
+      </div>
     </div>
   </div>
 
@@ -276,7 +289,9 @@
       const eventDescriptionInput = document.getElementById('event-description');
       const addTimerButton = document.getElementById('add-timer');
       const clearFormButton = document.getElementById('clear-form');
-      const timersContainer = document.getElementById('timers-container');
+      const timersTableBody = document.getElementById('timers-table-body');
+      const timersTable = document.getElementById('timers-table');
+      const emptyState = document.getElementById('empty-state');
       
       // Set minimum date to today
       const today = new Date();
@@ -293,7 +308,7 @@
       
       // Format date to display
       function formatDate(dateString) {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
       }
       
@@ -313,7 +328,7 @@
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         
         if (diff <= 0) {
-          return { isPast: true, text: 'Event has passed!' };
+          return { isPast: true, text: 'Expired' };
         }
         
         let text = '';
@@ -325,7 +340,7 @@
           text += `${hours} hr${hours !== 1 ? 's' : ''}`;
         }
         
-        return { isPast: false, text: text + ' remaining' };
+        return { isPast: false, text };
       }
       
       // Save timers to localStorage
@@ -368,39 +383,42 @@
         eventDescriptionInput.value = '';
       }
       
-      // Create a timer card element
-      function createTimerCard(timer) {
-        const { timeRemaining, isPast } = calculateTimeRemaining(timer.date);
+      // Create a timer row element
+      function createTimerRow(timer) {
+        const timeRemaining = calculateTimeRemaining(timer.date);
         
-        const timerCard = document.createElement('div');
-        timerCard.classList.add('timer-card');
-        if (isPast) {
-          timerCard.classList.add('past-event');
+        // If timer has expired, remove it and don't render
+        if (timeRemaining.isPast) {
+          deleteTimer(timer.id);
+          return null;
         }
         
-        timerCard.innerHTML = `
-          <div class="timer-header">
-            <span class="timer-category category-${timer.category}">${timer.category}</span>
-            <div class="timer-actions">
+        const tr = document.createElement('tr');
+        tr.dataset.id = timer.id;
+        
+        tr.innerHTML = `
+          <td>${timer.title}</td>
+          <td>${formatDate(timer.date)}</td>
+          <td><span class="category-badge category-${timer.category}">${timer.category}</span></td>
+          <td class="description-column">${timer.description || '-'}</td>
+          <td class="timer-countdown" data-date="${timer.date}">${timeRemaining.text}</td>
+          <td>
+            <div class="action-buttons">
               <button class="edit-btn" data-id="${timer.id}">Edit</button>
               <button class="delete-btn" data-id="${timer.id}">Delete</button>
             </div>
-          </div>
-          <h3 class="timer-title">${timer.title}</h3>
-          <p class="timer-date">${formatDate(timer.date)}</p>
-          ${timer.description ? `<p class="timer-description">${timer.description}</p>` : ''}
-          <div class="timer-countdown" data-date="${timer.date}">${timeRemaining}</div>
+          </td>
         `;
         
         // Add event listeners for edit and delete buttons
-        const deleteBtn = timerCard.querySelector('.delete-btn');
+        const deleteBtn = tr.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', () => {
           if (confirm(`Are you sure you want to delete the timer for "${timer.title}"?`)) {
             deleteTimer(timer.id);
           }
         });
         
-        const editBtn = timerCard.querySelector('.edit-btn');
+        const editBtn = tr.querySelector('.edit-btn');
         editBtn.addEventListener('click', () => {
           eventTitleInput.value = timer.title;
           eventDateInput.value = timer.date;
@@ -410,23 +428,28 @@
           // Change the Add Timer button temporarily
           addTimerButton.textContent = 'Update Timer';
           addTimerButton.dataset.editing = timer.id;
+          
+          // Scroll to form
+          eventTitleInput.scrollIntoView({ behavior: 'smooth' });
         });
         
-        return timerCard;
+        return tr;
       }
       
       // Render all timers
       function renderTimers() {
-        timersContainer.innerHTML = '';
+        // First remove any expired timers
+        timers = timers.filter(timer => {
+          const { isPast } = calculateTimeRemaining(timer.date);
+          return !isPast;
+        });
+        saveTimers();
+        
+        timersTableBody.innerHTML = '';
         
         if (timers.length === 0) {
-          const emptyState = document.createElement('div');
-          emptyState.classList.add('empty-state');
-          emptyState.innerHTML = `
-            <p>No timers added yet. Create your first timer to get started!</p>
-            <button id="create-first-timer">Create Timer</button>
-          `;
-          timersContainer.appendChild(emptyState);
+          timersTable.style.display = 'none';
+          emptyState.style.display = 'block';
           
           document.getElementById('create-first-timer').addEventListener('click', () => {
             eventTitleInput.focus();
@@ -434,43 +457,45 @@
           return;
         }
         
-        // Sort timers: upcoming events first, then past events
+        timersTable.style.display = 'table';
+        emptyState.style.display = 'none';
+        
+        // Sort timers by date (closest deadline first)
         timers.sort((a, b) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
-          const now = new Date();
-          
-          const aPast = dateA < now;
-          const bPast = dateB < now;
-          
-          if (aPast && !bPast) return 1;
-          if (!aPast && bPast) return -1;
-          
           return dateA - dateB;
         });
         
         timers.forEach(timer => {
-          const timerCard = createTimerCard(timer);
-          timersContainer.appendChild(timerCard);
+          const timerRow = createTimerRow(timer);
+          if (timerRow) {
+            timersTableBody.appendChild(timerRow);
+          }
         });
       }
       
       // Update countdown timers every minute
       function updateCountdowns() {
         const countdownElements = document.querySelectorAll('.timer-countdown');
+        let needsRerender = false;
+        
         countdownElements.forEach(element => {
           const date = element.dataset.date;
           const { isPast, text } = calculateTimeRemaining(date);
-          element.textContent = text;
           
-          // Add or remove past-event class based on current state
-          const card = element.closest('.timer-card');
           if (isPast) {
-            card.classList.add('past-event');
+            // If timer has expired, mark for re-render
+            needsRerender = true;
           } else {
-            card.classList.remove('past-event');
+            element.textContent = text;
           }
         });
+        
+        // If any timers have expired, re-render to remove them
+        if (needsRerender) {
+          renderTimers();
+        }
       }
       
       // Add event listeners
